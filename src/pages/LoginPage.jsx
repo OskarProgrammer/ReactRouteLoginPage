@@ -1,51 +1,57 @@
-import { useState } from "react";
-import { useLoaderData, NavLink, redirect } from "react-router-dom";
+
+import { useLoaderData, NavLink, redirect, Form } from "react-router-dom";
+
+const getData = async () => {
+    const res = await fetch ("http://localhost:2000/users")
+    return res.json()
+}
 
 
 export const LoginPage = () => {
-    const usersData = useLoaderData()
-    const [login, setLogin] = useState("")
-    const [password, setPassword] = useState("")
-    const [isError, setIsError ] = useState(false)
-
-    const checkLogin = () => {
-        usersData.map((user)=>{
-            if (user.password == password && user.name == login){
-
-                const newCurrentUserData = {
-                    id: user.id,
-                    isLogged: true
-                }
-
-                const requestOptions = {
-                    method: "PUT", 
-                    body: JSON.stringify(newCurrentUserData),
-                }
-
-                const response = fetch("http://localhost:5000/currentUserData/0", requestOptions)
-                console.log(response);
-            }
-        })
-        
-        if (isError) {
-            setIsError(true)
-        }
-    }
 
     return (
-        <form onChange={()=>{setIsError(false)}} onSubmit={(e)=>{e.preventDefault();}}>
+        <Form method="post" action="/loginPage" >
             <h1>Login Form</h1>
-            <input type="text" value={login} onChange={(e)=>(setLogin(e.target.value))} placeholder="Login"/>
-            <input type="password" value={password} onChange={(e)=>(setPassword(e.target.value))} placeholder="Password"/>
+            <input type="text" name="name" placeholder="Login"/>
+            <input type="password" name="password" placeholder="Password"/>
             <p>Haven't got account yet? <NavLink to="/registerPage">Click Here</NavLink></p>
-            {isError ? <p className="errorMessage">Login or password is invalid</p> : ""}
-            <button type="submit" onClick={() => {checkLogin()}}>Submit</button>
-        </form>
+            <button type="submit">Submit</button>
+        </Form>
     )
 }
 
-export const usersDataLoader = async() => {
-    const res = await fetch("http://localhost:5000/users")
-    return res.json()
+export const loginAction = async ({ request }) => {
+    let newCurrentUser = {}
+
+    const data = await request.formData()
+
+    const name = data.get("name")
+    const password = data.get("password")
+
+    const dbLogins = getData()
+    console.log(dbLogins);
+
+    dbLogins.map((login)=>{
+        if (login.name == name && login.password == password) {
+            newCurrentUser.name = login.name
+            newCurrentUser.password = login.password
+            newCurrentUser.personID = login.id
+            newCurrentUser.isLogged = true
+        }
+    })
+
+    if (newCurrentUser == {}) {
+        throw Error("Invalid login or password")
+    }else{
+
+        const requestOptions = {
+            method: "PUT", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newCurrentUser)
+        }
+
+        fetch ("http://localhost:2000/currentUser/0", requestOptions)
+        return
+    }
 }
 

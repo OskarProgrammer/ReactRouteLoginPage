@@ -1,35 +1,19 @@
 {
   "users": [
     {
+      "id": "2",
       "name": "Oskar",
       "password": "root",
-      "id": 12
-    },
-    {
-      "id": "c417d20a-fa1d-462b-a05e-a5424c413ef0",
-      "name": "Oskar",
-      "password": "123"
-    },
-    {
-      "id": "b174413d-0907-4793-8922-137759df6afe",
-      "name": "sss",
-      "password": "123"
-    },
-    {
-      "id": "59ad4daa-a3fa-477a-9a4c-4f83eb170146",
-      "name": "Oskar",
-      "password": "123"
-    },
-    {
-      "id": "c3531a70-ebc9-4e63-a925-831680c0995a",
-      "name": "123",
-      "password": "123"
+      "isLogged": true
     }
   ],
-  "currentUserData": [
+  "currentUser": [
     {
-      "id": 0,
-      "isLogged": false
+      "name": "",
+      "password": "",
+      "personID": "",
+      "isLogged": false,
+      "id": "0"
     }
   ]
 }
