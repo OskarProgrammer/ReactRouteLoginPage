@@ -1,13 +1,10 @@
 
-import { useLoaderData, NavLink, redirect, Form } from "react-router-dom";
-
-const getData = async () => {
-    const res = await fetch ("http://localhost:2000/users")
-    return res.json()
-}
+import { useLoaderData, NavLink, redirect, Form, useActionData } from "react-router-dom";
+import { fetchDataFromEndpoint } from "../App";
 
 
 export const LoginPage = () => {
+    const data = useActionData()
 
     return (
         <Form method="post" action="/loginPage" >
@@ -15,6 +12,7 @@ export const LoginPage = () => {
             <input type="text" name="name" placeholder="Login"/>
             <input type="password" name="password" placeholder="Password"/>
             <p>Haven't got account yet? <NavLink to="/registerPage">Click Here</NavLink></p>
+            {data && data.error && <p>{data.error}</p>}
             <button type="submit">Submit</button>
         </Form>
     )
@@ -28,30 +26,36 @@ export const loginAction = async ({ request }) => {
     const name = data.get("name")
     const password = data.get("password")
 
-    const dbLogins = getData()
-    console.log(dbLogins);
+    if (name == "" || password == ""){
+        return {error: "Name and password could not be null"}
+    }
 
-    dbLogins.map((login)=>{
-        if (login.name == name && login.password == password) {
-            newCurrentUser.name = login.name
-            newCurrentUser.password = login.password
-            newCurrentUser.personID = login.id
-            newCurrentUser.isLogged = true
+    const usersData = await fetchDataFromEndpoint("http://localhost:2000/users")
+    
+    usersData.map((user)=>{
+        if (user.name == name && user.password == password){
+            newCurrentUser = {
+                name:user.name,
+                password:user.password,
+                isLogged:true,
+                personID:user.id,
+                isAdmin: user.isAdmin,
+            }
         }
     })
 
-    if (newCurrentUser == {}) {
-        throw Error("Invalid login or password")
-    }else{
-
-        const requestOptions = {
-            method: "PUT", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newCurrentUser)
-        }
-
-        fetch ("http://localhost:2000/currentUser/0", requestOptions)
-        return
+    const requestOptions = {
+        method: "PUT", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newCurrentUser)
     }
+
+    await fetch("http://localhost:2000/currentUser/0", requestOptions)
+
+    if (newCurrentUser.isLogged){
+        return redirect("/")
+    }
+
+    return {error: "Name or password is not valid"}
 }
 

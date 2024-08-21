@@ -1,50 +1,55 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Form, NavLink, redirect, useActionData } from "react-router-dom";
 
 
 export const RegisterPage = () => {
-    const [login, setLogin] = useState("")
-    const [password,setPassword] = useState("")
-    const [repeatedPassword, setRepeatedPassword] = useState("")
-    const [isError, setIsError] = useState(false)
-
-    const addNewUser = async () => {
-        if (repeatedPassword != password || login == "" || password == ""){
-            setIsError(true)
-        }else{
-            const newUser = {
-                name: login,
-                password: password,
-                id: crypto.randomUUID()
-            }
-
-            const requestOptions = {
-                method: "POST", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newUser)
-            }
-
-            fetch("http://localhost:5000/users/", requestOptions)
-
-            setLogin("")
-            setPassword("")
-            setRepeatedPassword("")
-
-            window.location.href = "/loginPage"
-        }
-
-    }
+    const data = useActionData()
 
     return (
-        <form onChange={()=>(setIsError(false))} onSubmit={(e)=>{e.preventDefault();}}>
+        <Form method="post" action="/registerPage">
             <h1>Register Form</h1>
-            <input type="text" onChange={(e)=>(setLogin(e.target.value))} value={login} placeholder="Login"/>
-            <input type="password" onChange={(e)=>(setPassword(e.target.value))} value={password} placeholder="Password"/>
-            <input type="password" onChange={(e)=>(setRepeatedPassword(e.target.value))} value={repeatedPassword} placeholder="Repeat Password"/>
+            <input type="text" name="name" placeholder="Login"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <input type="password" name="repeatedPass" placeholder="Repeat Password"/>
+
             <p>Have got account? <NavLink to="/loginPage">Click Here</NavLink></p>
-            {isError ? <p className="errorMessage">Login or password is invalid</p>: ""}
-            <button type="submit" onClick={()=>{addNewUser()}}>Submit</button>
-        </form>
+
+            {data && data.error && <p>{data.error}</p>}
+
+            <button type="submit">Submit</button>
+        </Form>
     )
+}
+
+export const addNewUser = async ({ request }) => {
+    const data = await request.formData()
+
+    const name = data.get("name")
+    const password = data.get("password")
+    const repeatedPass = data.get("repeatedPass")
+
+    console.log(name, password, repeatedPass);
+
+    if (password != repeatedPass){
+        return {error : "Password and repeated password must be the same"}
+    }else if (name == "" || password == ""){
+        return {error : "Name , password and repeated password could not be null"}
+    }
+
+    let newUser = {
+        name: name,
+        password: password,
+        id: crypto.randomUUID().toString()
+    }
+
+    const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser)
+    }
+
+    await fetch ("http://localhost:2000/users", requestOptions)
+
+    return redirect("/loginPage")
 }
 

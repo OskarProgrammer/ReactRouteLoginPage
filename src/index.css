@@ -19,6 +19,10 @@ header {
   border-radius: 50px;
 }
 
+.adminPanelBtn {
+  margin-right: auto;
+}
+
 nav {
   display: flex;
   gap: 3rem;
@@ -90,4 +94,64 @@ form button {
 .errorMessage {
   color: red;
   font-weight: bold;
+}
+
+
+/* admin layout */
+
+.navBarAdmin {
+  margin: 15px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+}
+
+.navBarAdmin a {
+  background-color: rgb(255, 255, 255);
+  padding: 30px;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 50px;
+  box-shadow: 0px 0px 15px white;
+  font-family: ubuntu;
+  transition: 0.3s ease;
+}
+
+.navBarAdmin a.active {
+  background-color: black;
+  box-shadow: 0px 0px 15px black;
+  color: white;
+}
+
+
+/* usersList */
+
+.userTab {
+  background-color: aliceblue;
+  padding: 30px;
+  font-size: 20px;
+  font-family: ubuntu;
+  margin: 30px;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.userTab a {
+  text-decoration: none;
+  color: black;
+}
+
+.userTab button {
+  background-color: black;
+  border: 0px;
+  padding: 15px;
+  color: white;
+  border-radius: 20px;
+  transition: 0.5s ease;
+}
+
+.userTab button:hover {
+  background-color: var(--second-color);
+  cursor: pointer;
 }

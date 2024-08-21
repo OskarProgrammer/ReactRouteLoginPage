@@ -1,11 +1,19 @@
-import { redirect } from "react-router-dom"
+import { redirect, useLoaderData } from "react-router-dom"
 
-const logOut = async () => {
+
+export const LogOut = () => {
+    const data = useLoaderData()
+
+    return(<></>)
+}
+
+export const logOut = async () => {
     let newCurrentUser = {
         "name": "",
         "password": "",
         "personID": "",
         "isLogged": false,
+        "isAdmin":false,
       }
 
     const requestOptions = {
@@ -16,14 +24,7 @@ const logOut = async () => {
 
     fetch("http://localhost:2000/currentUser/0",requestOptions)
 
-    redirect("/")
-}
-
-
-export const LogOut = () => {
-    logOut()
-
-    return(<></>)
+    return redirect("/")
 }
 
 
