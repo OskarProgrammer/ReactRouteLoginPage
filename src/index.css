@@ -1,0 +1,93 @@
+
+:root {
+  --primary-color: rgb(67, 66, 66);
+  --second-color: rgb(204, 74, 74);
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--second-color);
+  margin: 0px;
+}
+
+
+/* home layout */
+header {
+  background-color: aliceblue;
+  padding: 30px;
+  margin: 15px;
+  border-radius: 50px;
+}
+
+nav {
+  display: flex;
+  gap: 3rem;
+  justify-content: end;
+}
+
+nav a {
+  background-color: var(--primary-color);
+  color: var(--second-color);
+  padding: 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-family: ubuntu;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.5s ease;
+  text-shadow: 0px 0px 30px var(--primary-color);
+}
+
+nav a.active {
+  background-color: var(--second-color);
+  color: var(--primary-color);
+  transition: 0.5s ease;
+}
+
+nav a:hover {
+  background-color: var(--second-color);
+  color: var(--primary-color);
+}
+
+
+/* login page */
+form {
+  margin: auto;
+  width: 25%;
+  background-color: aliceblue;
+  padding: 30px;
+  border-radius: 50px;
+  color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  gap:1rem;
+  text-align: center;
+  font-family: ubuntu;
+}
+
+form input {
+  font-size :25px;
+  padding: 10px;
+  border-radius: 20px;
+  margin:15px;
+  border: 0px;
+  background-color: aliceblue;
+  box-shadow: 0px 0px 15px var(--primary-color);
+}
+
+form button {
+  background-color: aliceblue;
+  border: 0px;
+  padding:20px;
+  width: 25%;
+  margin:auto;
+  font-size: 20px;
+  box-shadow: 0px 0px 15px var(--primary-color);
+  border-radius: 50px;
+}
+
+
+.errorMessage {
+  color: red;
+  font-weight: bold;
+}
